@@ -1,0 +1,10 @@
+package com.app.dto;
+
+@Data
+public class OrderItemDTO {
+
+    private Long productId;
+    private String productName;
+    private int quantity;
+    private double price;
+}

@@ -1,0 +1,33 @@
+package com.app.service.impl;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.app.entity.Order;
+import com.app.repository.CartItemRepository;
+import com.app.repository.OrderRepository;
+import com.app.service.OrderService;
+
+public class OrderServiceImpl implements OrderService {
+	
+	 @Autowired
+	    private OrderRepository orderRepo;
+
+	    @Autowired
+	    private CartItemRepository cartRepo;
+
+
+	@Override
+	public Order placeOrder() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Order> getOrders() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

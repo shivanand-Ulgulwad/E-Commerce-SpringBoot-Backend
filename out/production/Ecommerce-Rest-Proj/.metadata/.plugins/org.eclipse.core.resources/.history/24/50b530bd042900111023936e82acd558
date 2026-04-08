@@ -1,0 +1,54 @@
+package com.app.service.impl;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.app.dto.CartItemDTO;
+import com.app.entity.CartItem;
+import com.app.entity.Product;
+import com.app.mapper.CartItemMapper;
+import com.app.repository.CartItemRepository;
+import com.app.repository.ProductRepository;
+import com.app.service.CartService;
+
+@Service("cartService")
+public class CartServiceImpl implements CartService {
+	
+	@Autowired
+	private CartItemRepository cartRepo;
+	
+	  @Autowired
+	    private ProductRepository productRepo;
+	
+	  @Override
+	  public CartItemDTO addToCart(CartItemDTO dto) {
+
+	      Product product = productRepo.findById(dto.getProductId())
+	              .orElseThrow(() -> new RuntimeException("Product not found"));
+
+	      CartItem item = new CartItem();
+	      item.setProduct(product);
+	      item.setQuantity(dto.getQuantity());
+
+	      CartItem saved = cartRepo.save(item);
+
+	      return CartItemMapper.toDTO(saved);
+	  }
+
+	@Override
+	public List<CartItem> getCart() {
+		 return cartRepo.findAll();
+	}
+
+	@Override
+	public void removeItem(Long id) {
+		 cartRepo.deleteById(id);
+	}
+
+	
+
+	
+
+}

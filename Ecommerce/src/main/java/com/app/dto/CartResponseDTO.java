@@ -1,0 +1,15 @@
+package com.app.dto;
+
+import lombok.Data;
+
+@Data
+public class CartResponseDTO {
+
+    private Long id;
+    private Long productId;
+    private String productName;
+    private int quantity;
+    private double price;
+    private Double totalPrice;
+    private Long userId;
+}

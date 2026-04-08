@@ -1,0 +1,53 @@
+package com.app.service.impl;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.stereotype.Service;
+
+import com.app.entity.Category;
+import com.app.entity.Product;
+import com.app.repository.CategoryRepository;
+import com.app.repository.ProductRepository;
+import com.app.service.ProductService;
+
+@Service("productService")
+public class ProductServiceImpl implements ProductService {
+	@Autowired
+	private ProductRepository repo;
+	@Autowired 
+	private CategoryRepository categoryRepo;
+
+	@Override
+	public Product create(Product product) {
+		Long categoryId = product.getCategory().getId();
+
+	    Category category = categoryRepo.findById(categoryId)
+	            .orElseThrow(() -> new RuntimeException("Category not found"));
+
+	    product.setCategory(category); 
+
+	    return repo.save(product);
+	}
+
+	@Override
+	public List<Product> getAll() {
+		
+		return repo.findAll();
+	}
+
+	@Override
+	public List<Product> getByCategory(Long categoryId) {
+		
+		return repo.findByCategoryId(categoryId);
+	}
+
+	@Override
+	public Page<Product> getPaginated(int page, int size) {
+		
+		return repo.findAll(PageRequest.of(page, size));
+	}
+
+}

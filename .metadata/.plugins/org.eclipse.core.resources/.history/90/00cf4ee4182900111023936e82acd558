@@ -1,0 +1,50 @@
+package com.app.controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.app.dto.ApiResponse;
+import com.app.dto.CategoryDTO;
+import com.app.entity.Category;
+import com.app.service.CategoryService;
+
+@RestController
+@RequestMapping("/categories")
+public class CategoryController {
+	
+	 @Autowired
+	    private CategoryService service;
+	 
+	 @PostMapping("/save")
+	 public ResponseEntity<ApiResponse<CategoryDTO>> create(@RequestBody CategoryDTO dto) {
+
+		    return ResponseEntity
+		            .status(201)
+		            .body(new ApiResponse<>("Category created", service.create(dto)));
+		}
+
+	 @GetMapping
+	 public ResponseEntity<ApiResponse<List<CategoryDTO>>> getAll() {
+
+	     return ResponseEntity.ok(
+	             new ApiResponse<>("Categories fetched", service.getAll())
+	     );
+	 }
+
+	    @DeleteMapping("/delete/{id}")
+	    public ResponseEntity<String> delete(@PathVariable Long id) {
+	        service.delete(id);
+	        return new ResponseEntity<String>("category deleted with Id:"+id,HttpStatus.OK);
+	    }
+
+}

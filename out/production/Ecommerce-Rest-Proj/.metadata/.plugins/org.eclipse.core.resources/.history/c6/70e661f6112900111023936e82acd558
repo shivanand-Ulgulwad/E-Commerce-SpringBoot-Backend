@@ -1,0 +1,12 @@
+package com.app.service;
+
+import java.util.List;
+
+import com.app.dto.OrderDTO;
+import com.app.entity.Order;
+
+public interface OrderService {
+	OrderDTO placeOrder();
+
+    List<OrderDTO> getOrders();
+}

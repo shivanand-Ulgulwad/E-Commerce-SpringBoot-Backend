@@ -1,0 +1,7 @@
+package com.app.service;
+
+public class UserService {
+	UserResponseDTO create(UserRequestDTO dto);
+
+    UserResponseDTO getById(Long id);
+}

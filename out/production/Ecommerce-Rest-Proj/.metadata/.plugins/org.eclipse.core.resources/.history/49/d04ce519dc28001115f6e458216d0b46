@@ -1,0 +1,42 @@
+package com.app.service.impl;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.stereotype.Service;
+
+import com.app.entity.Product;
+import com.app.repository.ProductRepository;
+import com.app.service.ProductService;
+
+@Service("productService")
+public class ProductServiceImpl implements ProductService {
+	@Autowired
+	private ProductRepository repo;
+
+	@Override
+	public Product create(Product product) {
+		
+		return repo.save(product);
+	}
+
+	@Override
+	public List<Product> getAll() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Product> getByCategory(Long categoryId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Page<Product> getPaginated(int page, int size) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}
