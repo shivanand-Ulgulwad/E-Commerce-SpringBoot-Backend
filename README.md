@@ -19,12 +19,14 @@ Implementation
 Repository Layer → Database interaction
 DTO Layer → Request & Response models
 Mapper Layer → Entity ↔ DTO conversion
+
 📦 Core Features
 🛒 Cart Management
 Add products to cart
 Remove products from cart
 Update product quantity
 Track cart item count
+
 📦 Order Management
 Place orders from cart
 Store order details with:
@@ -32,11 +34,13 @@ Order
 Order Items
 Retrieve orders
 Orders sorted by latest date
+
 ❌ Cancellation Features
 ✅ Cancel Full Order
 PUT /orders/cancel/{id}
 ✅ Cancel Single Product (Advanced Feature)
 DELETE /items/{orderItemId}
+
 🔧 Backend Logic
 Removes only selected OrderItem
 Recalculates total order amount
@@ -63,6 +67,7 @@ src/
  │    └── response/
  ├── mapper/
  └── entity/
+ 
 ⚙️ Setup & Run Locally
 🔹 Prerequisites
 Java 17+
@@ -87,6 +92,7 @@ Proper use of DTO pattern
 RESTful API design
 Separation of concerns
 Scalable backend structure
+
 🚀 Future Improvements
 Authentication & Authorization (JWT)
 Payment Gateway Integration
