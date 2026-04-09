@@ -2,14 +2,11 @@ package com.app.controller;
 
 import java.util.List;
 
+import com.app.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import com.app.dto.ApiResponse;
-import com.app.dto.ProductRequestDTO;
-import com.app.dto.ProductResponseDTO;
 
 import com.app.service.ProductService;
 
@@ -84,6 +81,29 @@ public class ProductController {
     public ResponseEntity<ApiResponse<List<ProductResponseDTO>>> searchProducts(@RequestParam String query) {
         return ResponseEntity.ok(
                 new ApiResponse<>("Product is fetched", service.searchProducts(query))
+        );
+    }
+
+    @GetMapping("/page")
+    public ResponseEntity<ApiResponse<PageResponseDto<ProductResponseDTO>>> getProducts(
+            @RequestParam(required = false) String query,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size,
+            @RequestParam(defaultValue = "id") String sortBy,
+            @RequestParam(defaultValue = "asc") String sortDir
+    ) {
+
+        PageRequestDto dto = new PageRequestDto();
+        dto.setPage(page);
+        dto.setSize(size);
+        dto.setSortBy(sortBy);
+        dto.setSortDir(sortDir);
+
+        PageResponseDto<ProductResponseDTO> response =
+                service.getProducts(query, dto);
+
+        return ResponseEntity.ok(
+                new ApiResponse<>("Products fetched with pagination", response)
         );
     }
 }

@@ -2,6 +2,8 @@ package com.app.service;
 
 import java.util.List;
 
+import com.app.dto.PageRequestDto;
+import com.app.dto.PageResponseDto;
 import org.springframework.data.domain.Page;
 
 
@@ -19,8 +21,14 @@ public interface ProductService {
     ProductResponseDTO getById(Long id);
 
     public List<ProductResponseDTO> searchProducts(String query);
+    PageResponseDto<ProductResponseDTO> getProducts(
+            String query,
+            PageRequestDto pageRequestDto
+    );
 
     void delete(Long id);
 
     void deleteAll();
+
+
 }
