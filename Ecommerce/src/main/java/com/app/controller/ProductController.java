@@ -3,6 +3,7 @@ package com.app.controller;
 import java.util.List;
 
 import com.app.dto.*;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.http.ResponseEntity;
@@ -16,11 +17,11 @@ import jakarta.validation.Valid;
 @CrossOrigin(origins = "http://localhost:5174")
 @RestController
 @RequestMapping("/products")
-
+@RequiredArgsConstructor
 public class ProductController {
 
-	 @Autowired
-	    private ProductService service;
+
+	    private final ProductService service;
 
 	    @PostMapping
 	    public ResponseEntity<ApiResponse<ProductResponseDTO>> create(
@@ -31,7 +32,7 @@ public class ProductController {
 	                .body(new ApiResponse<>("Product created", service.create(dto)));
 	    }
 
-    @PostMapping("/saveAll")
+    @PostMapping("/bulk")
     public ResponseEntity<?> createAll(
             @Valid @RequestBody List<ProductRequestDTO> dto) {
 

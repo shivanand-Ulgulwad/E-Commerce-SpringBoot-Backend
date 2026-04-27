@@ -3,7 +3,7 @@ package com.app.service.impl;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import com.app.dto.CartRequestDTO;
@@ -18,20 +18,22 @@ import com.app.repository.UserRepository;
 import com.app.service.CartService;
 
 @Service("cartService")
+@RequiredArgsConstructor
 public class CartServiceImpl implements CartService {
 	
-	 @Autowired
-	    private CartItemRepository cartRepo;
 
-	    @Autowired
-	    private ProductRepository productRepo;
+	    private final CartItemRepository cartRepo;
 
-	    @Autowired
-	    private UserRepository userRepo;
+
+	    private final
+        ProductRepository productRepo;
+
+
+	    private final UserRepository userRepo;
 
 	    // ✅ ADD TO CART
 	    @Override
-	    public CartResponseDTO addToCart(CartRequestDTO dto) {
+	    public  CartResponseDTO addToCart(CartRequestDTO dto) {
 
 	        // 🔴 1. VALIDATION
 	        if (dto.getProductId() == null || dto.getUserId() == null) {

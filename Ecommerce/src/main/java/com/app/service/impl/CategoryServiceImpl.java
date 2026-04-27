@@ -3,8 +3,9 @@ package com.app.service.impl;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Service;
 
 
@@ -19,14 +20,15 @@ import com.app.repository.ProductRepository;
 import com.app.service.CategoryService;
 
 @Service("CategoryService")
+@RequiredArgsConstructor
 public class CategoryServiceImpl implements CategoryService {
-    @Autowired
-	private ModelMapper mapper;
-	 @Autowired
-	    private CategoryRepository categoryRepo;
 
-	    @Autowired
-	    private ProductRepository productRepo;
+	private final ModelMapper mapper;
+
+	    private final CategoryRepository categoryRepo;
+
+
+	    private final ProductRepository productRepo;
 
 	    // ✅ CREATE CATEGORY
 	    @Override

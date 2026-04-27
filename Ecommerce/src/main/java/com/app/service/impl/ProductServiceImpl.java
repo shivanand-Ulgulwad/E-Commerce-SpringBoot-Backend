@@ -4,8 +4,8 @@ import java.util.List;
 
 import com.app.dto.PageRequestDto;
 import com.app.dto.PageResponseDto;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -23,14 +23,15 @@ import com.app.repository.ProductRepository;
 import com.app.service.ProductService;
 
 @Service("productService")
+@RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
-    @Autowired
-    private ModelMapper mapper;
-	 @Autowired
-	    private ProductRepository productRepo;
 
-	    @Autowired
-	    private CategoryRepository categoryRepo;
+    private final ModelMapper mapper;
+
+	    private final ProductRepository productRepo;
+
+
+	    private final CategoryRepository categoryRepo;
 
 	    // ✅ CREATE PRODUCT
 	    @Override

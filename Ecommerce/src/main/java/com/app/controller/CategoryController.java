@@ -2,6 +2,7 @@ package com.app.controller;
 
 import java.util.List;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,11 +17,11 @@ import jakarta.validation.Valid;
 @CrossOrigin(origins = "http://localhost:5174")
 @RestController
 @RequestMapping("/categories")
-
+@RequiredArgsConstructor
 public class CategoryController {
 	
-	 @Autowired
-	    private CategoryService service;
+
+	    private final CategoryService service;
 
 	    @PostMapping
 	    public ResponseEntity<ApiResponse<CategoryResponseDTO>> create(
@@ -41,7 +42,7 @@ public class CategoryController {
                 )));
     }
 
-	    @GetMapping("/all")
+	    @GetMapping()
 	    public ResponseEntity<ApiResponse<List<CategoryResponseDTO>>> getAll() {
 
 	        return ResponseEntity.ok(

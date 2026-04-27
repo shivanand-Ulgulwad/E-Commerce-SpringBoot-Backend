@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.app.repository.OrderItemRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 
@@ -28,19 +28,20 @@ import com.app.service.OrderService;
 import jakarta.transaction.Transactional;
 
 @Service("orderService")
+@RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
 	
-	@Autowired
-    private CartItemRepository cartRepo;
 
-    @Autowired
-    private OrderRepository orderRepo;
+    private final CartItemRepository cartRepo;
 
-    @Autowired
-    private UserRepository userRepo;
 
-    @Autowired
-    private OrderItemRepository orderItemRepo;
+    private final OrderRepository orderRepo;
+
+
+    private final UserRepository userRepo;
+
+
+    private final OrderItemRepository orderItemRepo;
 
     @Override
     @Transactional

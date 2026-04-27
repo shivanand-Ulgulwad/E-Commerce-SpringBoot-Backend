@@ -2,6 +2,7 @@ package com.app.controller;
 
 import java.util.List;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,14 +17,14 @@ import jakarta.validation.Valid;
 @CrossOrigin(origins = "http://localhost:5174")
 @RestController
 @RequestMapping("/cart")
-
+@RequiredArgsConstructor
 public class CartController {
 	
-	 @Autowired
-	    private CartService service;
+
+	    private final CartService service;
 
 	    // ✅ ADD TO CART
-	    @PostMapping("/save")
+	    @PostMapping
 	    public ResponseEntity<ApiResponse<CartResponseDTO>> addToCart(
 	    		@Valid @RequestBody CartRequestDTO dto) {
 
@@ -43,8 +44,9 @@ public class CartController {
 	    }
 
     @PutMapping("/decrease/{id}")
-    public void decrease(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<String>> decrease(@PathVariable Long id) {
         service.decreaseQuantity(id);
+        return ResponseEntity.ok(new ApiResponse<>("Quantity decreased", null));
     }
 
 	    // ✅ REMOVE ITEM
