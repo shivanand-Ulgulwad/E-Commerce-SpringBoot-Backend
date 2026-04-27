@@ -32,3 +32,11 @@ build/
 
 ### VS Code ###
 .vscode/
+
+out/
+
+bin/
+*.class
+*.log
+.settings/
+
