@@ -2,6 +2,7 @@ package com.app.controller;
 
 import java.util.List;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,19 +17,13 @@ import jakarta.validation.Valid;
 @CrossOrigin(origins = "http://localhost:5174")
 @RestController
 @RequestMapping("/users")
-public class UserController2 {
-	@Autowired
-    private UserService service;
+@RequiredArgsConstructor
+public class UserController {
 
-    // ✅ CREATE USER
-    @PostMapping("/save")
-    public ResponseEntity<ApiResponse<UserResponseDTO>> create(
-            @Valid @RequestBody UserRequestDTO  dto) {
+    private final UserService service;
 
-        return ResponseEntity
-                .status(201)
-                .body(new ApiResponse<>("User created", service.create(dto)));
-    }
+
+
 
     // ✅ GET ALL USERS
     @GetMapping

@@ -17,9 +17,12 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 	    // Price filter
 	    List<Product> findByPriceLessThan(double price);
     List<Product> findByNameContainingIgnoreCaseOrCategoryNameContainingIgnoreCase(String name, String categoryName);
-	    
-	    Page<Product> findAll(Pageable pageable);
 
+    Page<Product> findByNameContainingIgnoreCaseOrCategory_NameContainingIgnoreCase(
+            String name,
+            String category,
+            Pageable pageable
+    );
 	    boolean existsByCategoryId(Long categoryId);
 
 

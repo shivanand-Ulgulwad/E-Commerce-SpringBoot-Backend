@@ -1,12 +1,15 @@
 package com.app.service.impl;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
+import com.app.dto.PageRequestDto;
+import com.app.dto.PageResponseDto;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 
@@ -20,14 +23,15 @@ import com.app.repository.ProductRepository;
 import com.app.service.ProductService;
 
 @Service("productService")
+@RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
-    @Autowired
-    private ModelMapper mapper;
-	 @Autowired
-	    private ProductRepository productRepo;
 
-	    @Autowired
-	    private CategoryRepository categoryRepo;
+    private final ModelMapper mapper;
+
+	    private final ProductRepository productRepo;
+
+
+	    private final CategoryRepository categoryRepo;
 
 	    // ✅ CREATE PRODUCT
 	    @Override
@@ -117,6 +121,53 @@ public class ProductServiceImpl implements ProductService {
                 .map(ProductMapper::toDTO)
                 .toList();
         return products;
+    }
+
+
+    @Override
+    public PageResponseDto<ProductResponseDTO> getProducts(
+            String query,
+            PageRequestDto pageRequestDto) {
+
+        // 1. Sorting
+        Sort sort = pageRequestDto.getSortDir().equalsIgnoreCase("asc") ?
+                Sort.by(pageRequestDto.getSortBy()).ascending() :
+                Sort.by(pageRequestDto.getSortBy()).descending();
+
+        // 2. Pageable
+        Pageable pageable = PageRequest.of(
+                pageRequestDto.getPage(),
+                pageRequestDto.getSize(),
+                sort
+        );
+
+        // 3. Fetch Data
+        Page<Product> productPage;
+
+        if (query != null && !query.trim().isEmpty()) {
+            query = query.trim();
+            productPage = productRepo
+                    .findByNameContainingIgnoreCaseOrCategory_NameContainingIgnoreCase(query,query, pageable);
+        } else {
+            productPage = productRepo.findAll(pageable);
+        }
+
+        // 4. Convert to DTO
+        List<ProductResponseDTO> content = productPage
+                .getContent()
+                .stream()
+                .map(ProductMapper::toDTO)
+                .toList();
+
+        // 5. Build Response
+        return new PageResponseDto<>(
+                content,
+                productPage.getNumber(),
+                productPage.getSize(),
+                productPage.getTotalElements(),
+                productPage.getTotalPages(),
+                productPage.isLast()
+        );
     }
 
 

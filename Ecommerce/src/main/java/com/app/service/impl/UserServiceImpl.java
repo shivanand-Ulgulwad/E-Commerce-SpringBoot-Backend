@@ -2,41 +2,54 @@ package com.app.service.impl;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import com.app.config.JwtUtility;
+import com.app.dto.LoginRequestDTO;
+import com.app.dto.RegisterRequestDTO;
+import com.app.entity.Role;
+
+import lombok.RequiredArgsConstructor;
+
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.app.dto.UserRequestDTO;
 import com.app.dto.UserResponseDTO;
 import com.app.entity.User;
-import com.app.mapper.UserMapper;
+
 import com.app.repository.UserRepository;
 import com.app.service.UserService;
 
 @Service("userService")
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
-	 @Autowired
-	    private UserRepository userRepo;
+
+	    private final UserRepository userRepo;
+        private final PasswordEncoder passwordEncoder;
+        private final JwtUtility jwtUtility;
 
 	    @Override
-	    public UserResponseDTO create(UserRequestDTO dto) {
+	    public String register(UserRequestDTO dto) {
             User existingUser = userRepo.findByEmail(dto.getEmail()).orElse(null);
 
             if (existingUser != null) {
                 // 👉 LOGIN FLOW (return existing user)
-                return mapToDTO(existingUser);
+                throw new RuntimeException("User is already Present");
             }
 
 	        User user = new User();
 	        user.setName(dto.getName());
 	        user.setEmail(dto.getEmail());
-            user.setPassword(dto.getPassword());
+            user.setPassword(passwordEncoder.encode( dto.getPassword()));
+            user.setRole(Role.USER);
 
 	        User saved = userRepo.save(user);
 
-	        return mapToDTO(saved);
+	        return "User is Registered with: "+dto.getEmail();
 	    }
 
-	    @Override
+
+
+    @Override
 	    public List<UserResponseDTO> getAll() {
 
 	        return userRepo.findAll()
@@ -73,4 +86,6 @@ public class UserServiceImpl implements UserService {
 
 	        return dto;
 	    }
+
+
 }

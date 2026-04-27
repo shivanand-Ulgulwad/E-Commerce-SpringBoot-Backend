@@ -2,6 +2,7 @@ package com.app.controller;
 
 import java.util.List;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,10 +16,11 @@ import com.app.service.OrderService;
 @CrossOrigin(origins = "http://localhost:5174")
 @RestController
 @RequestMapping("/orders")
+@RequiredArgsConstructor
 public class OrderController {
 		
-	 @Autowired
-	    private OrderService service;
+
+	    private final OrderService service;
 
 	    @PostMapping
 	    public ResponseEntity<ApiResponse<OrderResponseDTO>> placeOrder(
