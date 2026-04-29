@@ -1,28 +1,28 @@
 # Maven
 target/
 
-# Gradle
+# Build folders
+out/
 build/
+bin/
 
-# IDE
-.idea/
-.vscode/
+# Eclipse
+.metadata/
 .settings/
-.classpath
 .project
+.classpath
+
+# IntelliJ
+.idea/
+
+# VS Code
+.vscode/
 
 # Logs
 *.log
 
-# OS
-.DS_Store
-
-# Compiled files
+# Compiled
 *.class
 
-# Output folders
-out/
-bin/
-
-# Node modules (if frontend exists)
+# Node
 node_modules/
