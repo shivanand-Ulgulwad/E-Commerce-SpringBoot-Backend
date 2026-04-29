@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<typeInfoHistroy>
-    <typeInfo handle="=Ecommerce/src\/main\/java=/optional=/true=/=/maven.pomderived=/true=/&lt;com.app.service{CategoryService.java[CategoryService" modifiers="513" timestamp="1774531941304"/>
-    <typeInfo handle="=Ecommerce/src\/main\/java=/optional=/true=/=/maven.pomderived=/true=/&lt;com.app.service{ProductService.java[ProductService" modifiers="513" timestamp="1774529989372"/>
-    <typeInfo handle="=Ecommerce/src\/main\/java=/optional=/true=/=/maven.pomderived=/true=/&lt;com.app.service{CartService.java[CartService" modifiers="513" timestamp="1774530752586"/>
-    <typeInfo handle="=Ecommerce/src\/main\/java=/optional=/true=/=/maven.pomderived=/true=/&lt;com.app.service{OrderService.java[OrderService" modifiers="513" timestamp="1774532151958"/>
-    <typeInfo handle="=Ecommerce/src\/main\/java=/optional=/true=/=/maven.pomderived=/true=/&lt;com.app.service{UserService.java[UserService" modifiers="513" timestamp="1774533291836"/>
-</typeInfoHistroy>

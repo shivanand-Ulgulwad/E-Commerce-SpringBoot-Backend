@@ -1,7 +1,0 @@
-package com.app.dto;
-
-public class OrderRequestDTO {
-	
-	private Long userId;
-
-}
