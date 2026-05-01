@@ -1,0 +1,36 @@
+package com.app.service.impl;
+
+import java.util.List;
+
+import org.springframework.data.domain.Page;
+
+import com.app.entity.Product;
+import com.app.service.ProductService;
+
+public class ProductServiceImpl implements ProductService {
+
+	@Override
+	public Product create(Product product) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Product> getAll() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Product> getByCategory(Long categoryId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Page<Product> getPaginated(int page, int size) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

@@ -1,0 +1,4 @@
+#Tomcat publish data
+#Fri Mar 27 12:35:57 IST 2026
+org.eclipse.jst.jee.server\:/binary\:C\:\\Users\\Shivanand\\.m2\\repository\\org\\apache\\tomcat\\embed\\tomcat-embed-el\\11.0.18\\tomcat-embed-el-11.0.18.jar=WEB-INF/lib/tomcat-embed-el-11.0.18.jar
+org.eclipse.jst.jee.server\:/binary\:C\:\\Users\\Shivanand\\.m2\\repository\\org\\springframework\\spring-web\\7.0.6\\spring-web-7.0.6.jar=WEB-INF/lib/spring-web-7.0.6.jar

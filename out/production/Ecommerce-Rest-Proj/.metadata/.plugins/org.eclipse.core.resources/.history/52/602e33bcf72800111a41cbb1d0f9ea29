@@ -1,0 +1,22 @@
+package com.app.service;
+
+import java.util.List;
+
+import org.springframework.data.domain.Page;
+
+import com.app.dto.ProductDTO;
+import com.app.entity.Product;
+
+public interface ProductService {
+	
+	ProductDTO create(ProductDTO dto);
+
+	    List<ProductDTO> getAll();
+
+	    List<Product> getByCategory(Long categoryId);
+
+	    Page<Product> getPaginated(int page, int size);
+
+		ProductDTO getById(Long id);
+
+}

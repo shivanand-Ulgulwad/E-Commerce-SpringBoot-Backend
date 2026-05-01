@@ -1,0 +1,18 @@
+package com.app.mapper;
+
+import com.app.dto.CartResponseDTO;
+
+public class CartMapper {
+
+    public static CartResponseDTO toDTO(CartItem item) {
+
+        CartResponseDTO dto = new CartResponseDTO();
+
+        dto.setId(item.getId());
+        dto.setProductName(item.getProduct().getName());
+        dto.setQuantity(item.getQuantity());
+        dto.setPrice(item.getProduct().getPrice());
+
+        return dto;
+    }
+}

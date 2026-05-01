@@ -1,0 +1,10 @@
+package com.app.service;
+
+import com.app.dto.UserRequestDTO;
+import com.app.dto.UserResponseDTO;
+
+public interface UserService {
+	UserResponseDTO create(UserRequestDTO dto);
+
+    UserResponseDTO getById(Long id);
+}

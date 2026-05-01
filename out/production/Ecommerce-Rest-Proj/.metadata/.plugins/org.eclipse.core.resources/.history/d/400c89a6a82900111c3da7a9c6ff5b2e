@@ -1,0 +1,61 @@
+package com.app.controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.app.dto.ApiResponse;
+import com.app.dto.CartRequestDTO;
+import com.app.dto.CartResponseDTO;
+import com.app.entity.CartItem;
+import com.app.service.CartService;
+
+import jakarta.validation.Valid;
+
+@RestController
+@RequestMapping("/cart")
+public class CartController {
+	
+	 @Autowired
+	    private CartService service;
+
+	    // ✅ ADD TO CART
+	    @PostMapping("/save")
+	    public ResponseEntity<ApiResponse<CartResponseDTO>> addToCart(
+	    		@Valid @RequestBody CartRequestDTO dto) {
+
+	        return ResponseEntity
+	                .status(201)
+	                .body(new ApiResponse<>("Item added to cart", service.addToCart(dto)));
+	    }
+
+	    // ✅ GET USER CART
+	    @GetMapping("/{userId}")
+	    public ResponseEntity<ApiResponse<List<CartResponseDTO>>> getCart(
+	            @PathVariable Long userId) {
+
+	        return ResponseEntity.ok(
+	                new ApiResponse<>("Cart fetched", service.getCartByUser(userId))
+	        );
+	    }
+
+	    // ✅ REMOVE ITEM
+	    @DeleteMapping("/{id}")
+	    public ResponseEntity<ApiResponse<String>> remove(@PathVariable Long id) {
+
+	        service.removeItem(id);
+
+	        return ResponseEntity.ok(
+	                new ApiResponse<>("Item removed from cart", null)
+	        );
+	    }
+}
