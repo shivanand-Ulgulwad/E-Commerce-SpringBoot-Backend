@@ -5,6 +5,8 @@ WORKDIR /app
 
 COPY . .
 
+WORKDIR /app/Ecommerce
+
 RUN mvn clean package -DskipTests
 
 # ===== RUN STAGE =====
@@ -12,8 +14,8 @@ FROM eclipse-temurin:21
 
 WORKDIR /app
 
-COPY --from=build /app/target/*.jar app.jar
+COPY --from=build /app/Ecommerce/target/*.jar app.jar
 
-EXPOSE 554
+EXPOSE 5454
 
 ENTRYPOINT ["java","-jar","app.jar"]
