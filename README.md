@@ -262,7 +262,7 @@ The project implements several real-world backend concepts:
 
 # 🗄️ Database
 
-The project uses MySQL as the primary relational database.
+The project uses PostgreSQL as the primary relational database.
 
 Main entities include:
 
