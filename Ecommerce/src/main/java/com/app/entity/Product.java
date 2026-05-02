@@ -2,7 +2,10 @@ package com.app.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -23,6 +26,11 @@ public class Product {
 	 	
 	 	@NonNull
 	    private double price;
+
+         @CreationTimestamp
+         public LocalDateTime createdAt;
+         @UpdateTimestamp
+          public LocalDateTime  updatedAt;
 
 	    @ManyToOne
         @JoinColumn(name = "category_id")

@@ -4,6 +4,9 @@ import java.util.List;
 
 import com.app.dto.PageRequestDto;
 import com.app.dto.PageResponseDto;
+import com.app.exception.CategoryNotFoundException;
+import com.app.exception.CategoryRequiredException;
+import com.app.exception.ProductNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -39,12 +42,12 @@ public class ProductServiceImpl implements ProductService {
 
 	        // 🔴 VALIDATION
 	        if (dto.getCategoryId() == null) {
-	            throw new RuntimeException("CategoryId is required");
+	            throw new CategoryRequiredException("CategoryId is required");
 	        }
 
 	        // 🔴 FETCH CATEGORY
 	        Category category = categoryRepo.findById(dto.getCategoryId())
-	                .orElseThrow(() -> new RuntimeException("Category not found"));
+	                .orElseThrow(() -> new CategoryNotFoundException("Category not found"));
 
 	        // 🔴 CONVERT DTO → ENTITY
 	        Product product = ProductMapper.toEntity(dto, category);
@@ -63,7 +66,7 @@ public class ProductServiceImpl implements ProductService {
 
                     .map(x -> {
                         Category category = categoryRepo.findById(x.getCategoryId())
-                                .orElseThrow(() -> new RuntimeException("Category not found: " + x.getCategoryId()));
+                                .orElseThrow(() -> new CategoryNotFoundException("Category not found: " + x.getCategoryId()));
 
                         return Product.builder()
                                 .name(x.getName())
@@ -93,7 +96,7 @@ public class ProductServiceImpl implements ProductService {
 	    public ProductResponseDTO getById(Long id) {
 
 	        Product product = productRepo.findById(id)
-	                .orElseThrow(() -> new RuntimeException("Product not found"));
+	                .orElseThrow(() -> new ProductNotFoundException("Product not found"));
 
 	        return ProductMapper.toDTO(product);
 	    }
@@ -103,7 +106,7 @@ public class ProductServiceImpl implements ProductService {
 	    public void delete(Long id) {
 
 	        if (!productRepo.existsById(id)) {
-	            throw new RuntimeException("Product not found");
+	            throw new ProductNotFoundException("Product not found");
 	        }
 
 	        productRepo.deleteById(id);
