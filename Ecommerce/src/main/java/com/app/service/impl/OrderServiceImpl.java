@@ -6,19 +6,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.app.entity.*;
+import com.app.exception.UnauthorizedAccessException;
 import com.app.repository.OrderItemRepository;
+import com.app.service.CurrentUserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 
 import com.app.dto.OrderRequestDTO;
 import com.app.dto.OrderResponseDTO;
-import com.app.entity.CartItem;
-import com.app.entity.Category;
-import com.app.entity.Order;
-import com.app.entity.OrderItem;
-import com.app.entity.User;
-import com.app.mapper.CategoryMapper;
 import com.app.mapper.OrderMapper;
 import com.app.repository.CartItemRepository;
 import com.app.repository.OrderRepository;
@@ -40,6 +41,8 @@ public class OrderServiceImpl implements OrderService {
 
     private final UserRepository userRepo;
 
+    private final CurrentUserService currentUserService;
+
 
     private final OrderItemRepository orderItemRepo;
 
@@ -47,15 +50,8 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     public OrderResponseDTO placeOrder(OrderRequestDTO dto) {
 
-        // 🔴 1. VALIDATE USER
-        if (dto.getUserId() == null) {
-            throw new RuntimeException("UserId is required");
-        }
+       User user = currentUserService.getCurrentUser();
 
-        User user = userRepo.findById(dto.getUserId())
-                .orElseThrow(() -> new RuntimeException("User not found"));
-
-        // 🔴 2. GET CART ITEMS
         List<CartItem> cartItems = cartRepo.findByUserId(user.getId());
 
         if (cartItems.isEmpty()) {
@@ -65,6 +61,7 @@ public class OrderServiceImpl implements OrderService {
         // 🔴 3. CREATE ORDER
         Order order = new Order();
         order.setUser(user);
+        order.setStatus(OrderStatus.PENDING);
         order.setOrderDate(LocalDateTime.now());
 
 
@@ -116,14 +113,23 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public void cancelOrder(Long id) {
+        User currentUser = currentUserService.getCurrentUser();
         Order order = orderRepo.findById(id)
                 .orElseThrow(() -> new RuntimeException("Order not found"));
 
-        if ("CANCELLED".equals(order.getStatus())) {
+        if (!order.getUser().getId().equals(currentUser.getId())) {
+
+            throw new UnauthorizedAccessException(
+                    "You cannot cancel this order"
+            );
+        }
+
+        if (order.getStatus() == OrderStatus.CANCELLED) {
+
             throw new RuntimeException("Order already cancelled");
         }
 
-        order.setStatus("CANCELLED");
+        order.setStatus(OrderStatus.CANCELLED);
 
         orderRepo.save(order);
     }
@@ -131,10 +137,19 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public void cancelOrderItem(Long orderItemId) {
+
+        User currentUser = currentUserService.getCurrentUser();
+
         OrderItem item = orderItemRepo.findById(orderItemId)
                 .orElseThrow(() -> new RuntimeException("Order item not found"));
 
         Order order = item.getOrder();
+
+        if (!order.getUser().getId().equals(currentUser.getId())) {
+            throw new UnauthorizedAccessException(
+                    "You cannot cancel this order item"
+            );
+        }
 
         // 🔴 1. Remove item from order
         order.getItems().remove(item);
@@ -154,13 +169,21 @@ public class OrderServiceImpl implements OrderService {
 
     // ✅ GET ORDERS BY USER
     @Override
-    public List<OrderResponseDTO> getOrdersByUser(Long userId) {
+    public Page<OrderResponseDTO> getMyOrders(int page,int size) {
 
-        List<Order> orders = orderRepo.findByUserId(userId);
+        User user = currentUserService.getCurrentUser();
 
-        return orders.stream()
-                .map(OrderMapper::toDTO)
-                .toList();
+        Pageable pageable = PageRequest.of(
+                page,
+                size,
+                Sort.by("orderDate").descending()
+        );
+
+        Page<Order> orders =
+                orderRepo.findByUserId(user.getId(), pageable);
+
+
+        return orders.map(OrderMapper::toDTO);
     }
 
 

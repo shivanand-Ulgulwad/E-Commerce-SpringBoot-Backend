@@ -24,11 +24,12 @@ public class Order {
     private LocalDateTime orderDate;
     private double totalAmount;
 
-    @Column(name = "status")
-    private String status;  // CREATED, PAID, SHIPPED
-
     @ManyToOne
+    @JoinColumn(name="user_id")
     private User user;
+
+    @Enumerated(EnumType.STRING)
+    private OrderStatus status;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderItem> items;

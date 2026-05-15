@@ -4,6 +4,7 @@ import java.util.List;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,14 +32,22 @@ public class OrderController {
 	                .body(new ApiResponse<>("Order placed", service.placeOrder(dto)));
 	    }
 
-	    @GetMapping("/user/{userId}")
-	    public ResponseEntity<ApiResponse<List<OrderResponseDTO>>> getOrders(
-	            @PathVariable Long userId) {
+    @GetMapping("/my-orders")
+    public ResponseEntity<ApiResponse<Page<OrderResponseDTO>>> getMyOrders(
 
-	        return ResponseEntity.ok(
-	                new ApiResponse<>("Orders fetched", service.getOrdersByUser(userId))
-	        );
-	    }
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+
+        return ResponseEntity.ok(
+                new ApiResponse<>(
+                        "Orders fetched successfully",
+                        service.getMyOrders(page, size)
+                )
+        );
+    }
+
+
 
     @PutMapping("/cancel/{id}")
     public ResponseEntity<String> cancelOrder(@PathVariable Long id) {

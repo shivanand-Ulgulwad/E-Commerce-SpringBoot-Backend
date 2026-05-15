@@ -6,6 +6,7 @@ import java.util.List;
 import com.app.dto.OrderRequestDTO;
 import com.app.dto.OrderResponseDTO;
 import com.app.entity.Order;
+import org.springframework.data.domain.Page;
 
 public interface OrderService {
 	 OrderResponseDTO placeOrder(OrderRequestDTO dto);
@@ -13,5 +14,6 @@ public interface OrderService {
 
      void cancelOrderItem(Long orderItemId);
 
-	    List<OrderResponseDTO> getOrdersByUser(Long userId);
+	    Page<OrderResponseDTO> getMyOrders(int page,
+                                           int size);
 }
