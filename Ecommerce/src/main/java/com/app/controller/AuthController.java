@@ -38,12 +38,19 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<ApiResponse<String>> login(@Valid @RequestBody LoginRequestDTO user){
 
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        user.getEmail(),
-                        user.getPassword()
-                )
-        );
+        try {
+
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword())
+            );
+
+            System.out.println("LOGIN SUCCESS");
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+
+        }
 
         return new ResponseEntity<>(
                 new ApiResponse<>(

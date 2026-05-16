@@ -31,7 +31,7 @@ public class JwtUtility {
                 .subject(username)
                 .signWith(getKey(), SignatureAlgorithm.HS256)
                 .issuedAt(new Date())
-                .expiration(new Date(System.currentTimeMillis()+1000*60*5))
+                .expiration(new Date(System.currentTimeMillis()+1000*60*60*24))
                 .compact();
 
     }
@@ -46,7 +46,7 @@ public class JwtUtility {
 
     public boolean validateToken(String token, UserDetails userDetails) {
         final String username = extractUsername(token);
-        return (username.equals(userDetails.getUsername()) && !isValid(token));
+        return (username.equals(userDetails.getUsername()) && isValid(token));
     }
 
     public String extractUsername(String token){
