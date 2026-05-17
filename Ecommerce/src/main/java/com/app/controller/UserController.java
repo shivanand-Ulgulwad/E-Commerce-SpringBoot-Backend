@@ -2,12 +2,16 @@ package com.app.controller;
 
 import java.util.List;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import com.app.dto.ApiResponse;
+import com.app.dto.ApiResponseDTO;
 import com.app.dto.UserRequestDTO;
 import com.app.dto.UserResponseDTO;
 import com.app.service.UserService;
@@ -17,6 +21,8 @@ import jakarta.validation.Valid;
 @CrossOrigin(origins = "http://localhost:5174")
 @RestController
 @RequestMapping("/users")
+@Tag(name = "User APIs", description = "User profile and account management APIs")
+@SecurityRequirement(name = "bearerAuth")
 @RequiredArgsConstructor
 public class UserController {
 
@@ -25,34 +31,42 @@ public class UserController {
 
 
 
-    // ✅ GET ALL USERS
+    @Operation(
+            summary = "Get all users",
+            description = "ADMIN only endpoint to fetch all users"
+    )
     @GetMapping
-    public ResponseEntity<ApiResponse<List<UserResponseDTO>>> getAll() {
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ApiResponseDTO<List<UserResponseDTO>>> getAll() {
 
         return ResponseEntity.ok(
-                new ApiResponse<>("Users fetched", service.getAll())
+                new ApiResponseDTO<>("Users fetched", service.getAll())
         );
     }
 
-    // ✅ GET USER BY ID
+    @Operation(
+            summary = "Get user by Id"
+    )
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<UserResponseDTO>> getById(
+    public ResponseEntity<ApiResponseDTO<UserResponseDTO>> getById(
             @PathVariable Long id) {
 
         return ResponseEntity.ok(
-                new ApiResponse<>("User fetched", service.getById(id))
+                new ApiResponseDTO<>("User fetched", service.getById(id))
         );
     }
 
-    // ✅ DELETE USER
+    @Operation(
+            summary = "Delete user by Id"
+    )
     @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponse<String>> delete(
+    public ResponseEntity<ApiResponseDTO<String>> delete(
             @PathVariable Long id) {
 
         service.delete(id);
 
         return ResponseEntity.ok(
-                new ApiResponse<>("User deleted", null)
+                new ApiResponseDTO<>("User deleted", null)
         );
     }
 }

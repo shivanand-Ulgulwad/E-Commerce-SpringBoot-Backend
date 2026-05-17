@@ -3,10 +3,14 @@ package com.app.controller;
 import java.util.List;
 
 import com.app.dto.*;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import com.app.service.ProductService;
@@ -17,76 +21,113 @@ import jakarta.validation.Valid;
 @CrossOrigin(origins = "http://localhost:5174")
 @RestController
 @RequestMapping("/products")
+@Tag(name = "Product APIs", description = "Product management, search, and catalog APIs")
+@SecurityRequirement(name = "bearerAuth")
 @RequiredArgsConstructor
 public class ProductController {
 
 
 	    private final ProductService service;
 
-	    @PostMapping
-	    public ResponseEntity<ApiResponse<ProductResponseDTO>> create(
+    @Operation(
+            summary = "Create product",
+            description = "ADMIN only endpoint to create a new product"
+    )
+    @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
+	    public ResponseEntity<ApiResponseDTO<ProductResponseDTO>> create(
 	           @Valid @RequestBody ProductRequestDTO dto) {
 
 	        return ResponseEntity
 	                .status(201)
-	                .body(new ApiResponse<>("Product created", service.create(dto)));
+	                .body(new ApiResponseDTO<>("Product created", service.create(dto)));
 	    }
 
+    @Operation(
+            summary = "Create multiple products",
+            description = "ADMIN only endpoint to create a new product"
+    )
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/bulk")
     public ResponseEntity<?> createAll(
             @Valid @RequestBody List<ProductRequestDTO> dto) {
 
         return ResponseEntity
                 .status(201)
-                .body(new ApiResponse<>("Product created", service.createAll(dto)));
+                .body(new ApiResponseDTO<>("Product created", service.createAll(dto)));
     }
 
-	    @GetMapping
-	    public ResponseEntity<ApiResponse<List<ProductResponseDTO>>> getAll() {
+    @Operation(
+            summary = "Get All Products"
+    )
+    @GetMapping("/all")
+	    public ResponseEntity<ApiResponseDTO<List<ProductResponseDTO>>> getAll() {
 
 	        return ResponseEntity.ok(
-	                new ApiResponse<>("Products fetched", service.getAll())
+	                new ApiResponseDTO<>("Products fetched", service.getAll())
 	        );
 	    }
 
-	    @GetMapping("/{id}")
-	    public ResponseEntity<ApiResponse<ProductResponseDTO>> getById(
+    @Operation(
+            summary = "Get product by ID",
+            description = "Fetch product details using product ID"
+    )
+    @GetMapping("/{id}")
+	    public ResponseEntity<ApiResponseDTO<ProductResponseDTO>> getById(
 	            @PathVariable Long id) {
 
 	        return ResponseEntity.ok(
-	                new ApiResponse<>("Product fetched", service.getById(id))
+	                new ApiResponseDTO<>("Product fetched", service.getById(id))
 	        );
 	    }
 
-	    @DeleteMapping("/{id}")
-	    public ResponseEntity<ApiResponse<String>> delete(@PathVariable Long id) {
+    @Operation(
+            summary = "Delete product",
+            description = "ADMIN only endpoint to delete product"
+    )
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+	    public ResponseEntity<ApiResponseDTO<String>> delete(@PathVariable Long id) {
 
 	        service.delete(id);
 
 	        return ResponseEntity.ok(
-	                new ApiResponse<>("Product deleted", null)
+	                new ApiResponseDTO<>("Product deleted", null)
 	        );
 	    }
 
+    @Operation(
+            summary = "Delete All products",
+            description = "ADMIN only endpoint to delete product"
+    )
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping
-    public ResponseEntity<ApiResponse<String>> deleteAllProducts() {
+    public ResponseEntity<ApiResponseDTO<String>> deleteAllProducts() {
 
         service.deleteAll();
 
         return ResponseEntity.ok(
-                new ApiResponse<>("All products deleted", null)
+                new ApiResponseDTO<>("All products deleted", null)
         );
     }
 
+    @Operation(
+            summary = "Search products",
+            description = "Search products by name or keyword"
+    )
     @GetMapping("/search")
-    public ResponseEntity<ApiResponse<List<ProductResponseDTO>>> searchProducts(@RequestParam String query) {
+    public ResponseEntity<ApiResponseDTO<List<ProductResponseDTO>>> searchProducts(@RequestParam String query) {
         return ResponseEntity.ok(
-                new ApiResponse<>("Product is fetched", service.searchProducts(query))
+                new ApiResponseDTO<>("Product is fetched", service.searchProducts(query))
         );
     }
 
-    @GetMapping("/page")
-    public ResponseEntity<ApiResponse<PageResponseDto<ProductResponseDTO>>> getProducts(
+    @Operation(
+            summary = "Get all products",
+            description = "Supports pagination, sorting, and filtering"
+    )
+    @GetMapping
+    public ResponseEntity<ApiResponseDTO<PageResponseDto<ProductResponseDTO>>> getProducts(
             @RequestParam(required = false) String query,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size,
@@ -104,7 +145,7 @@ public class ProductController {
                 service.getProducts(query, dto);
 
         return ResponseEntity.ok(
-                new ApiResponse<>("Products fetched with pagination", response)
+                new ApiResponseDTO<>("Products fetched with pagination", response)
         );
     }
 }
